@@ -1,0 +1,19 @@
+endpoints:
+  prometheus:
+    sensitive: false
+ehcache:
+  caches:
+    my-cache:
+      enabled: true
+micronaut:
+  server:
+    port: 8081
+  application:
+    name: postgreSQLRestAPI
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        step: PT1M
+        descriptions: true

@@ -1,0 +1,5 @@
+import com.microstream.bookstore.domain.Purchaseitem
+avgprice()
+{
+	select * from Purchaseitem 
+}

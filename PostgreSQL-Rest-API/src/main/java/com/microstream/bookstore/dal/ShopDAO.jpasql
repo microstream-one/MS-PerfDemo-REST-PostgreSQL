@@ -1,0 +1,5 @@
+import com.microstream.bookstore.domain.Shop
+getAllShops()
+{
+	select * from Shop
+}
