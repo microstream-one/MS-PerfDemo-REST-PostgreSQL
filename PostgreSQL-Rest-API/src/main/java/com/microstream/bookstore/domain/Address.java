@@ -1,80 +1,40 @@
 
 package com.microstream.bookstore.domain;
 
-import com.microstream.bookstore.dal.AddressDAO;
-import com.rapidclipse.framework.server.data.DAO;
-import com.rapidclipse.framework.server.resources.Caption;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import jakarta.persistence.Cacheable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 
 /**
  * Address
  */
-@DAO(AddressDAO.class)
-@Caption("{%address}")
-@Entity
-@Cacheable(true)
-@Table(name = "address", schema = "public")
+//@Entity
+//@Cacheable(true)
+//@Table(name = "address", schema = "public")
 public class Address implements java.io.Serializable
 {
 	
-	private long			id;
-	private City			city;
+	private final String	UUID	= java.util.UUID.randomUUID().toString();
 	private String			address;
 	private String			address2;
-	private String			zipcode;
-	private Set<Customer>	customers	= new HashSet<>(0);
-	private Set<Employee>	employees	= new HashSet<>(0);
-	private Set<Shop>		shops		= new HashSet<>(0);
-	private Set<Author>		authors		= new HashSet<>(0);
-	private Set<Publisher>	publishers	= new HashSet<>(0);
+	private String			zip;
+	private String			city;
+	private String			country;
 	
-	public Address()
+	public Address(String address, String address2, String zip, String city, String country)
 	{
-	}
-	
-	@Caption("Id")
-	@Id
-	
-	@Column(name = "id", unique = true, nullable = false, columnDefinition = "bigserial")
-	public long getId()
-	{
-		return this.id;
-	}
-	
-	public void setId(long id)
-	{
-		this.id = id;
-	}
-	
-	@Caption("City")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "city_id", columnDefinition = "int8")
-	public City getCity()
-	{
-		return this.city;
-	}
-	
-	public void setCity(City city)
-	{
+		super();
+		this.address = address;
+		this.address2 = address2;
+		this.zip = zip;
 		this.city = city;
+		this.country = country;
 	}
 	
-	@Caption("Address")
-	@Column(name = "address", columnDefinition = "varchar")
 	public String getAddress()
 	{
-		return this.address;
+		return address;
 	}
 	
 	public void setAddress(String address)
@@ -82,11 +42,9 @@ public class Address implements java.io.Serializable
 		this.address = address;
 	}
 	
-	@Caption("Address2")
-	@Column(name = "address2", columnDefinition = "varchar")
 	public String getAddress2()
 	{
-		return this.address2;
+		return address2;
 	}
 	
 	public void setAddress2(String address2)
@@ -94,76 +52,39 @@ public class Address implements java.io.Serializable
 		this.address2 = address2;
 	}
 	
-	@Caption("Zipcode")
-	@Column(name = "zipcode", columnDefinition = "varchar")
-	public String getZipcode()
+	public String getZip()
 	{
-		return this.zipcode;
+		return zip;
 	}
 	
-	public void setZipcode(String zipcode)
+	public void setZip(String zip)
 	{
-		this.zipcode = zipcode;
+		this.zip = zip;
 	}
 	
-	@Caption("Customers")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
-	public Set<Customer> getCustomers()
+	public String getCity()
 	{
-		return this.customers;
+		return city;
 	}
 	
-	public void setCustomers(Set<Customer> customers)
+	public void setCity(String city)
 	{
-		this.customers = customers;
+		this.city = city;
 	}
 	
-	@Caption("Employees")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
-	public Set<Employee> getEmployees()
+	public String getCountry()
 	{
-		return this.employees;
+		return country;
 	}
 	
-	public void setEmployees(Set<Employee> employees)
+	public void setCountry(String country)
 	{
-		this.employees = employees;
+		this.country = country;
 	}
 	
-	@Caption("Shops")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
-	public Set<Shop> getShops()
+	public String getUUID()
 	{
-		return this.shops;
-	}
-	
-	public void setShops(Set<Shop> shops)
-	{
-		this.shops = shops;
-	}
-	
-	@Caption("Authors")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
-	public Set<Author> getAuthors()
-	{
-		return this.authors;
-	}
-	
-	public void setAuthors(Set<Author> authors)
-	{
-		this.authors = authors;
-	}
-	
-	@Caption("Publishers")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "address")
-	public Set<Publisher> getPublishers()
-	{
-		return this.publishers;
-	}
-	
-	public void setPublishers(Set<Publisher> publishers)
-	{
-		this.publishers = publishers;
+		return UUID;
 	}
 	
 }

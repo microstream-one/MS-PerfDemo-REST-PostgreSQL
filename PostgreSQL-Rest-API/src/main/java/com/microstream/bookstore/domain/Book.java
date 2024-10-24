@@ -1,204 +1,125 @@
 
 package com.microstream.bookstore.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.microstream.bookstore.dal.BookDAO;
-import com.rapidclipse.framework.server.data.DAO;
-import com.rapidclipse.framework.server.resources.Caption;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import com.microstream.bookstore.dto.DTOBook;
+
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.persistence.Cacheable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 
 /**
  * Book
  */
-@DAO(BookDAO.class)
-@Caption("{%isbn13}")
+@Serdeable
 @Entity
 @Cacheable(true)
-@Table(name = "book", schema = "public")
+@Table(name = "books", schema = "public")
 public class Book implements java.io.Serializable
 {
-	@JsonIgnore
-	private long				id;
-	private Author				author;
-	@JsonIgnore
-	private Genre				genre;
-	@JsonIgnore
-	private Language			language;
-	@JsonIgnore
-	private Publisher			publisher;
-	private String				isbn13;
-	@JsonIgnore
-	private Double				purchasePrice;
-	@JsonIgnore
-	private Double				retailPrice;
-	private String				title;
-	@JsonIgnore
-	private Set<Purchaseitem>	purchaseitems	= new HashSet<>(0);
-	@JsonIgnore
-	private Set<Inventoryitem>	inventoryitems	= new HashSet<>(0);
+	
+	@Id private String			ISBN;
+	@NotNull private String		title;
+	@NotNull private LocalDate	publicationDate;
+	@NotNull private int		edition;
+	@NotNull private int		availableQuantity;
+	@NotNull private BigDecimal	price;
+
+	// private Author author;
+	// private Publisher publisher;
 	
 	public Book()
 	{
+		// TODO Auto-generated constructor stub
 	}
 	
-	@Caption("Id")
-	@Id
+	public Book(DTOBook dto)
+	{	
+		this.ISBN = dto.ISBN();
+		this.title = dto.title();
+		this.publicationDate = dto.publicationDate();
+		this.edition = dto.edition();
+		this.availableQuantity = dto.availableQuantity();
+		this.price = new BigDecimal(dto.price());
+		
+//		 this.author = new Author(dto.author().mail(), dto.author().firstname(), dto.author().lastname());
+//		 this.publisher = new Publisher(dto.publisher().mail(), dto.publisher().company());
+	}
+		
 	
-	@Column(name = "id", unique = true, nullable = false, columnDefinition = "bigserial")
-	public long getId()
+	public void setISBN(String iSBN)
 	{
-		return this.id;
+		ISBN = iSBN;
 	}
-	
-	public void setId(long id)
-	{
-		this.id = id;
-	}
-	
-	@Caption("Author")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "author_id", columnDefinition = "int8")
-	@JsonSerialize
-	public Author getAuthor()
-	{
-		return this.author;
-	}
-	
-	public void setAuthor(Author author)
-	{
-		this.author = author;
-	}
-	
-	@Caption("Genre")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "genre_id", columnDefinition = "int8")
-	@JsonIgnore
-	public Genre getGenre()
-	{
-		return this.genre;
-	}
-	
-	public void setGenre(Genre genre)
-	{
-		this.genre = genre;
-	}
-	
-	@Caption("Language")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "language_id", columnDefinition = "int8")
-	@JsonIgnore
-	public Language getLanguage()
-	{
-		return this.language;
-	}
-	
-	public void setLanguage(Language language)
-	{
-		this.language = language;
-	}
-	
-	@Caption("Publisher")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "publisher_id", columnDefinition = "int8")
-	@JsonIgnore
-	public Publisher getPublisher()
-	{
-		return this.publisher;
-	}
-	
-	public void setPublisher(Publisher publisher)
-	{
-		this.publisher = publisher;
-	}
-	
-	@Caption("Isbn13")
-	@Column(name = "isbn13", columnDefinition = "varchar")
-	@JsonSerialize
-	public String getIsbn13()
-	{
-		return this.isbn13;
-	}
-	
-	public void setIsbn13(String isbn13)
-	{
-		this.isbn13 = isbn13;
-	}
-	
-	@Caption("PurchasePrice")
-	@Column(name = "purchase_price", columnDefinition = "float8", precision = 17, scale = 17)
-	@JsonIgnore
-	public Double getPurchasePrice()
-	{
-		return this.purchasePrice;
-	}
-	
-	public void setPurchasePrice(Double purchasePrice)
-	{
-		this.purchasePrice = purchasePrice;
-	}
-	
-	@Caption("RetailPrice")
-	@Column(name = "retail_price", columnDefinition = "float8", precision = 17, scale = 17)
-	@JsonIgnore
-	public Double getRetailPrice()
-	{
-		return this.retailPrice;
-	}
-	
-	public void setRetailPrice(Double retailPrice)
-	{
-		this.retailPrice = retailPrice;
-	}
-	
-	@Caption("Title")
-	@Column(name = "title", columnDefinition = "varchar")
-	@JsonSerialize
-	public String getTitle()
-	{
-		return this.title;
-	}
-	
+
 	public void setTitle(String title)
 	{
 		this.title = title;
 	}
-	
-	@Caption("Purchaseitems")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-	@JsonIgnore
-	public Set<Purchaseitem> getPurchaseitems()
+
+	public void setPublicationDate(LocalDate publicationDate)
 	{
-		return this.purchaseitems;
+		this.publicationDate = publicationDate;
+	}
+
+	public void setEdition(int edition)
+	{
+		this.edition = edition;
+	}
+
+	public int getAvailableQuantity()
+	{
+		return availableQuantity;
 	}
 	
-	public void setPurchaseitems(Set<Purchaseitem> purchaseitems)
+	public void setAvailableQuantity(int availableQuantity)
 	{
-		this.purchaseitems = purchaseitems;
+		this.availableQuantity = availableQuantity;
 	}
 	
-	@Caption("Inventoryitems")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "book")
-	@JsonIgnore
-	public Set<Inventoryitem> getInventoryitems()
+	public BigDecimal getPrice()
 	{
-		return this.inventoryitems;
+		return price;
 	}
 	
-	public void setInventoryitems(Set<Inventoryitem> inventoryitems)
+	public void setPrice(BigDecimal price)
 	{
-		this.inventoryitems = inventoryitems;
+		this.price = price;
 	}
 	
+	public String getISBN()
+	{
+		return ISBN;
+	}
+	
+	public String getTitle()
+	{
+		return title;
+	}
+	
+	public LocalDate getPublicationDate()
+	{
+		return publicationDate;
+	}
+	
+	public int getEdition()
+	{
+		return edition;
+	}
+	
+	// public Author getAuthor()
+	// {
+	// return author;
+	// }
+	//
+	// public Publisher getPublisher()
+	// {
+	// return publisher;
+	// }
 }

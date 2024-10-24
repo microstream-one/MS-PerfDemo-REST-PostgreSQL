@@ -1,5 +1,0 @@
-import com.microstream.bookstore.domain.Book
-AvgPrice()
-{
-	select purchasePrice from Book
-}

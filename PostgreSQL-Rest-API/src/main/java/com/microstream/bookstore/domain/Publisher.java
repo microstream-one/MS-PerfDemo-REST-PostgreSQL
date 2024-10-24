@@ -1,91 +1,60 @@
 
 package com.microstream.bookstore.domain;
 
-import com.microstream.bookstore.dal.PublisherDAO;
-import com.rapidclipse.framework.server.data.DAO;
-import com.rapidclipse.framework.server.resources.Caption;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
+import jakarta.persistence.Cacheable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 
-/**
- * Publisher
- */
-@DAO(PublisherDAO.class)
-@Caption("{%name}")
-@Entity
-@Cacheable(true)
-@Table(name = "publisher", schema = "public")
+
+//@Entity
+//@Cacheable(true)
+//@Table(name = "publisher", schema = "public")
 public class Publisher implements java.io.Serializable
 {
 	
-	private long		id;
-	private Address		address;
-	private String		name;
-	private Set<Book>	books	= new HashSet<>(0);
+	private final String	UUID	= java.util.UUID.randomUUID().toString();
+	private String			mail;
+	private String			company;
 	
-	public Publisher()
+	public Publisher(String mail, String company)
 	{
+		super();
+		this.mail = mail;
+		this.company = company;
 	}
 	
-	@Caption("Id")
-	@Id
-	
-	@Column(name = "id", unique = true, nullable = false, columnDefinition = "bigserial")
-	public long getId()
+	public String getMail()
 	{
-		return this.id;
+		return mail;
 	}
 	
-	public void setId(long id)
+	public void setMail(String mail)
 	{
-		this.id = id;
+		this.mail = mail;
 	}
 	
-	@Caption("Address")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "address_id", columnDefinition = "int8")
-	public Address getAddress()
+	public String getCompany()
 	{
-		return this.address;
+		return company;
 	}
 	
-	public void setAddress(Address address)
+	public void setCompany(String company)
 	{
-		this.address = address;
+		this.company = company;
 	}
 	
-	@Caption("Name")
-	@Column(name = "name", columnDefinition = "varchar")
-	public String getName()
+	public String getUUID()
 	{
-		return this.name;
+		return UUID;
 	}
-	
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-	
-	@Caption("Books")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "publisher")
-	public Set<Book> getBooks()
-	{
-		return this.books;
-	}
-	
-	public void setBooks(Set<Book> books)
-	{
-		this.books = books;
-	}
-	
 }

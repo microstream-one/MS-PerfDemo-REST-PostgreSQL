@@ -1,99 +1,70 @@
 
 package com.microstream.bookstore.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.microstream.bookstore.dal.AuthorDAO;
-import com.rapidclipse.framework.server.data.DAO;
-import com.rapidclipse.framework.server.resources.Caption;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.micronaut.serde.annotation.Serdeable;
+import jakarta.persistence.Cacheable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 
 /**
  * Author
  */
-@DAO(AuthorDAO.class)
-@Caption("{%name}")
-@Entity
-@Cacheable(true)
-@Table(name = "author", schema = "public")
+//@Serdeable
+//@Entity
+//@Cacheable(true)
+//@Table(name = "author", schema = "public")
 public class Author implements java.io.Serializable
 {
-	@JsonIgnore
-	private long		id;
-	@JsonIgnore
-	private Address		address;
-	private String		name;
-	@JsonIgnore
-	private Set<Book>	books	= new HashSet<>(0);
+	private final String	UUID	= java.util.UUID.randomUUID().toString();
+	private String			mail;
+	private String			firstname;
+	private String			lastname;
 	
-	public Author()
+	public String getMail()
 	{
+		return mail;
 	}
 	
-	@Caption("Id")
-	@Id
-	
-	@Column(name = "id", unique = true, nullable = false, columnDefinition = "bigserial")
-	@JsonIgnore
-	public long getId()
+	public void setMail(String mail)
 	{
-		return this.id;
+		this.mail = mail;
 	}
 	
-	public void setId(long id)
+	public String getFirstname()
 	{
-		this.id = id;
+		return firstname;
 	}
 	
-	@Caption("Address")
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "address_id", columnDefinition = "int8")
-	@JsonIgnore
-	public Address getAddress()
+	public void setFirstname(String firstname)
 	{
-		return this.address;
+		this.firstname = firstname;
 	}
 	
-	public void setAddress(Address address)
+	public String getLastname()
 	{
-		this.address = address;
+		return lastname;
 	}
 	
-	@Caption("Name")
-	@Column(name = "name", columnDefinition = "varchar")
-	@JsonSerialize
-	public String getName()
+	public void setLastname(String lastname)
 	{
-		return this.name;
+		this.lastname = lastname;
 	}
 	
-	public void setName(String name)
+	public String getUUID()
 	{
-		this.name = name;
-	}
-	
-	@Caption("Books")
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "author")
-	@JsonIgnore
-	public Set<Book> getBooks()
-	{
-		return this.books;
-	}
-	
-	public void setBooks(Set<Book> books)
-	{
-		this.books = books;
+		return UUID;
 	}
 	
 }

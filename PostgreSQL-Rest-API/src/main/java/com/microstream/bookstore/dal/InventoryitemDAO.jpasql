@@ -1,5 +1,0 @@
-import com.microstream.bookstore.domain.Inventoryitem
-booksInShop()
-{
-	select * from Inventoryitem
-}
