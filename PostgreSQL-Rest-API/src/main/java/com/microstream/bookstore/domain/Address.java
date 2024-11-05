@@ -1,26 +1,32 @@
 
 package com.microstream.bookstore.domain;
 
+import io.micronaut.data.annotation.GeneratedValue;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 
 /**
  * Address
  */
-//@Entity
-//@Cacheable(true)
-//@Table(name = "address", schema = "public")
-public class Address implements java.io.Serializable
+@Serdeable
+@Entity
+@Cacheable(true)
+@Table(name = "addresses", schema = "public")
+public class Address
 {
 	
-	private final String	UUID	= java.util.UUID.randomUUID().toString();
-	private String			address;
-	private String			address2;
-	private String			zip;
-	private String			city;
-	private String			country;
+	@Id
+	@GeneratedValue private int		id;
+	@NotNull private String			address;
+	private String					address2;
+	@NotNull private String			zip;
+	@NotNull private String			city;
+	@NotNull private String			country;
 	
 	public Address(String address, String address2, String zip, String city, String country)
 	{
@@ -82,9 +88,14 @@ public class Address implements java.io.Serializable
 		this.country = country;
 	}
 	
-	public String getUUID()
+	public int getId()
 	{
-		return UUID;
+		return id;
+	}
+	
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 	
 }

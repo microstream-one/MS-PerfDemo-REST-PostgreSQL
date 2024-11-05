@@ -1,34 +1,34 @@
 
 package com.microstream.bookstore.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
+import io.micronaut.data.annotation.GeneratedValue;
+import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Cacheable;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 
-
-//@Entity
-//@Cacheable(true)
-//@Table(name = "publisher", schema = "public")
-public class Publisher implements java.io.Serializable
+@Serdeable
+@Entity
+@Cacheable(true)
+@Table(name = "publisher", schema = "public")
+public class Publisher
 {
 	
-	private final String	UUID	= java.util.UUID.randomUUID().toString();
-	private String			mail;
-	private String			company;
+	@Id
+	@GeneratedValue private int		id;
+	@NotNull private String			mail;
+	@NotNull private String			company;
+	
+	public Publisher()
+	{
+		super();
+	}
 	
 	public Publisher(String mail, String company)
 	{
-		super();
 		this.mail = mail;
 		this.company = company;
 	}
@@ -53,8 +53,14 @@ public class Publisher implements java.io.Serializable
 		this.company = company;
 	}
 	
-	public String getUUID()
+	public int getId()
 	{
-		return UUID;
+		return id;
 	}
+	
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	
 }

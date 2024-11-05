@@ -1,36 +1,42 @@
 
 package com.microstream.bookstore.domain;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Cacheable;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 
 /**
  * Author
  */
-//@Serdeable
-//@Entity
-//@Cacheable(true)
-//@Table(name = "author", schema = "public")
+@Serdeable
+@Entity
+@Cacheable(true)
+@Table(name = "author", schema = "public")
 public class Author implements java.io.Serializable
 {
-	private final String	UUID	= java.util.UUID.randomUUID().toString();
-	private String			mail;
-	private String			firstname;
-	private String			lastname;
+	@Id
+	@GeneratedValue private int		id;
+	@NotNull private String			mail;
+	@NotNull private String			firstname;
+	@NotNull private String			lastname;
+	
+	public Author()
+	{
+		super();
+	}
+	
+	public Author(String mail, String firstname, String lastname)
+	{
+		super();
+		this.mail = mail;
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
 	
 	public String getMail()
 	{
@@ -62,9 +68,14 @@ public class Author implements java.io.Serializable
 		this.lastname = lastname;
 	}
 	
-	public String getUUID()
+	public int getId()
 	{
-		return UUID;
+		return id;
+	}
+	
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 	
 }

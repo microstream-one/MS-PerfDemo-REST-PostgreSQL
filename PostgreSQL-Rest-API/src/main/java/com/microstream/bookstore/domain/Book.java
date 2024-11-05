@@ -6,10 +6,13 @@ import java.time.LocalDate;
 
 import com.microstream.bookstore.dto.DTOBook;
 
+import io.micronaut.data.annotation.GeneratedValue;
+import io.micronaut.data.annotation.GeneratedValue.Type;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -24,15 +27,17 @@ import jakarta.validation.constraints.NotNull;
 public class Book implements java.io.Serializable
 {
 	
-	@Id private String			ISBN;
-	@NotNull private String		title;
-	@NotNull private LocalDate	publicationDate;
-	@NotNull private int		edition;
-	@NotNull private int		availableQuantity;
-	@NotNull private BigDecimal	price;
-
-	// private Author author;
-	// private Publisher publisher;
+	@Id
+	@GeneratedValue(value = Type.IDENTITY) private int		id;
+	@NotNull private String									isbn;
+	@NotNull private String									title;
+	@NotNull private LocalDate								publicationDate;
+	@NotNull private int									edition;
+	@NotNull private int									availableQuantity;
+	@NotNull private BigDecimal								price;
+	
+	@ManyToOne private Author								author;
+	@ManyToOne private Publisher							publisher;
 	
 	public Book()
 	{
@@ -40,39 +45,65 @@ public class Book implements java.io.Serializable
 	}
 	
 	public Book(DTOBook dto)
-	{	
-		this.ISBN = dto.ISBN();
+	{
+		this.isbn = dto.ISBN();
 		this.title = dto.title();
 		this.publicationDate = dto.publicationDate();
 		this.edition = dto.edition();
 		this.availableQuantity = dto.availableQuantity();
 		this.price = new BigDecimal(dto.price());
-		
-//		 this.author = new Author(dto.author().mail(), dto.author().firstname(), dto.author().lastname());
-//		 this.publisher = new Publisher(dto.publisher().mail(), dto.publisher().company());
 	}
-		
 	
-	public void setISBN(String iSBN)
+	public int getId()
 	{
-		ISBN = iSBN;
+		return id;
 	}
-
+	
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	
+	public String getIsbn()
+	{
+		return isbn;
+	}
+	
+	public void setIsbn(String isbn)
+	{
+		this.isbn = isbn;
+	}
+	
+	public String getTitle()
+	{
+		return title;
+	}
+	
 	public void setTitle(String title)
 	{
 		this.title = title;
 	}
-
+	
+	public LocalDate getPublicationDate()
+	{
+		return publicationDate;
+	}
+	
 	public void setPublicationDate(LocalDate publicationDate)
 	{
 		this.publicationDate = publicationDate;
 	}
-
+	
+	public int getEdition()
+	{
+		return edition;
+	}
+	
 	public void setEdition(int edition)
 	{
 		this.edition = edition;
 	}
-
+	
 	public int getAvailableQuantity()
 	{
 		return availableQuantity;
@@ -93,33 +124,24 @@ public class Book implements java.io.Serializable
 		this.price = price;
 	}
 	
-	public String getISBN()
+	public Author getAuthor()
 	{
-		return ISBN;
+		return author;
 	}
 	
-	public String getTitle()
+	public void setAuthor(Author author)
 	{
-		return title;
+		this.author = author;
 	}
 	
-	public LocalDate getPublicationDate()
+	public Publisher getPublisher()
 	{
-		return publicationDate;
+		return publisher;
 	}
 	
-	public int getEdition()
+	public void setPublisher(Publisher publisher)
 	{
-		return edition;
+		this.publisher = publisher;
 	}
 	
-	// public Author getAuthor()
-	// {
-	// return author;
-	// }
-	//
-	// public Publisher getPublisher()
-	// {
-	// return publisher;
-	// }
 }
