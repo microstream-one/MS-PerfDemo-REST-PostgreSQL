@@ -1,12 +1,24 @@
 package com.microstream.bookstore.repository;
 
 import com.microstream.bookstore.domain.Author;
+import com.microstream.bookstore.domain.Book;
 
 import io.micronaut.data.repository.jpa.criteria.PredicateSpecification;
 
-public class BookPredicateProvider
+public interface BookPredicateProvider
 {
-	public static PredicateSpecification<Author> nameEquals(String title) {
-        return (root, criteriaBuilder) -> criteriaBuilder.equal(root.get("title"), "%" + title + "%");
-    }
+	static PredicateSpecification<Book> titleContains(String title)
+	{
+		return (root, criteriaBuilder) -> criteriaBuilder.equal(root.get("title"), "%" + title + "%");
+	}
+
+	static PredicateSpecification<Book> authorIdEquals(Author author)
+	{
+		return (root, criteriaBuilder) -> criteriaBuilder.equal(root.get("author"), author.getId());
+	}
+
+	static PredicateSpecification<Book> isbnEquals(String isbn)
+	{
+		return (root, criteriaBuilder) -> criteriaBuilder.equal(root.get("isbn"), isbn);
+	}
 }

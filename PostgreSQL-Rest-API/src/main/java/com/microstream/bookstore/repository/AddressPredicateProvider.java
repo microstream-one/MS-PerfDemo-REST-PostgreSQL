@@ -4,9 +4,10 @@ import com.microstream.bookstore.domain.Address;
 
 import io.micronaut.data.repository.jpa.criteria.PredicateSpecification;
 
-public class AddressPredicateProvider
+public interface AddressPredicateProvider
 {
-	public static PredicateSpecification<Address> nameEquals(String address) {
-        return (root, criteriaBuilder) -> criteriaBuilder.equal(root.get("address"), "%" + address + "%");
-    }
+	static PredicateSpecification<Address> addressEquals(String address)
+	{
+		return (root, criteriaBuilder) -> criteriaBuilder.equal(root.get("address"), "%" + address + "%");
+	}
 }
