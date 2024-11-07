@@ -10,5 +10,5 @@ import io.micronaut.data.repository.jpa.JpaSpecificationExecutor;
 @JdbcRepository(dialect = Dialect.POSTGRES) 
 public interface RepoAuthors extends PageableRepository<Author, Integer>, JpaSpecificationExecutor<Author>
 {
-	
+
 }

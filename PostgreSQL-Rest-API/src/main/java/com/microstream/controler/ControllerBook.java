@@ -65,13 +65,15 @@ public class ControllerBook
 	@Get
 	List<Book> findAll()
 	{
-		return bookRepo.findAll(Pageable.from(0, LIST_LIMIT)).getContent();
+//		return bookRepo.findAll(Pageable.from(0, LIST_LIMIT)).getContent();
+		return bookRepo.list();
 	}
 
 	@Get("/search/{title}")
 	List<Book> findByTitle(@PathVariable final String title)
 	{
-		return bookRepo.findAll(BookPredicateProvider.titleContains(title));
+//		return bookRepo.findAll(BookPredicateProvider.titleContains(title));
+		return bookRepo.searchBooksByTitle("%" + title + "%");
 	}
 
 	@Get("/search/author/{name}")
