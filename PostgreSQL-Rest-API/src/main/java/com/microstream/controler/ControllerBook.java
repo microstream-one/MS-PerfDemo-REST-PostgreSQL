@@ -9,7 +9,6 @@ import com.microstream.bookstore.domain.Book;
 import com.microstream.bookstore.domain.Publisher;
 import com.microstream.bookstore.dto.DTOBook;
 import com.microstream.bookstore.repository.AuthorPredicateProvider;
-import com.microstream.bookstore.repository.BookPredicateProvider;
 import com.microstream.bookstore.repository.PublisherPredicateProvider;
 import com.microstream.bookstore.repository.RepoAddress;
 import com.microstream.bookstore.repository.RepoAuthors;
@@ -18,7 +17,6 @@ import com.microstream.bookstore.repository.RepoPublisher;
 
 import io.micrometer.observation.annotation.Observed;
 import io.micronaut.core.annotation.NonNull;
-import io.micronaut.data.model.Pageable;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
@@ -65,34 +63,33 @@ public class ControllerBook
 	@Get
 	List<Book> findAll()
 	{
-//		return bookRepo.findAll(Pageable.from(0, LIST_LIMIT)).getContent();
-		return bookRepo.list();
+		// TODO: Find out how to use Pageable here
+		return bookRepo.list().stream().limit(LIST_LIMIT).toList();
 	}
 
 	@Get("/search/{title}")
 	List<Book> findByTitle(@PathVariable final String title)
 	{
-//		return bookRepo.findAll(BookPredicateProvider.titleContains(title));
 		return bookRepo.searchBooksByTitle("%" + title + "%");
 	}
 
-	@Get("/search/author/{name}")
-	List<Book> findByAuthorName(@PathVariable final String name)
+	@Get("/search/author/{email}")
+	List<Book> findByAuthorEmail(@PathVariable final String email)
 	{
-		final var author = authorRepo.findOne(AuthorPredicateProvider.nameContains(name))
+		final var author = authorRepo.findOne(AuthorPredicateProvider.emailEquals(email))
 			.orElseThrow(NotFoundException::new);
-		return bookRepo.findAll(BookPredicateProvider.authorIdEquals(author));
+		return bookRepo.searchByAuthorId(author.getId());
 	}
 
 	@Get("/{isbn}")
 	Book findByIsbn(@PathVariable final String isbn)
 	{
-		return bookRepo.findOne(BookPredicateProvider.isbnEquals(isbn)).orElse(null);
+		return bookRepo.searchBooksByIsbn(isbn).orElse(null);
 	}
 
 	private Book internalGetBook(final DTOBook dto)
 	{
-		final var author = authorRepo.findOne(AuthorPredicateProvider.mailEquals(dto.author().mail()))
+		final var author = authorRepo.findOne(AuthorPredicateProvider.emailEquals(dto.author().mail()))
 			.orElseGet(
 				() -> authorRepo.save(
 					new Author(
@@ -107,7 +104,7 @@ public class ControllerBook
 					)
 				)
 			);
-		final var publisher = pubRepo.findOne(PublisherPredicateProvider.mailEquals(dto.publisher().mail()))
+		final var publisher = pubRepo.findOne(PublisherPredicateProvider.emailEquals(dto.publisher().mail()))
 			.orElseGet(
 				() -> pubRepo.save(
 					new Publisher(

@@ -6,7 +6,7 @@ import io.micronaut.data.repository.jpa.criteria.PredicateSpecification;
 
 public class PublisherPredicateProvider
 {
-	public static PredicateSpecification<Publisher> mailEquals(String mail)
+	public static PredicateSpecification<Publisher> emailEquals(String mail)
 	{
 		return (root, criteriaBuilder) -> criteriaBuilder.equal(root.get("mail"), mail);
 	}
