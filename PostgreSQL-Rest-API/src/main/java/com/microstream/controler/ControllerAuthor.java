@@ -1,15 +1,11 @@
 package com.microstream.controler;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.microstream.bookstore.domain.Author;
 import com.microstream.bookstore.repository.RepoAuthors;
 
-import io.micronaut.data.model.Pageable;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.annotation.PathVariable;
 
 @Controller("/authors")
 public class ControllerAuthor
@@ -21,9 +17,11 @@ public class ControllerAuthor
 		this.authors = authors;
 	}
 
-	@Get
-	public List<Author> getAuthors(@QueryValue Optional<Integer> limit)
+	@Get("/byID/{id}")
+	Author findByID(@PathVariable final String id)
 	{
-		return authors.findAll(Pageable.from(0, limit.orElse(-1))).getContent();
+		Author author = authors.findById(Integer.valueOf(id)).get();
+		
+		return author;
 	}
 }

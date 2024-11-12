@@ -26,18 +26,18 @@ import jakarta.validation.constraints.NotNull;
 public class Address
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) private int													id;
-	@NotNull private String																		address;
-	private String																				address2;
-	@NotNull private String																		zip;
-	@NotNull private String																		city;
-	@NotNull private String																		country;
+	@GeneratedValue(strategy = GenerationType.IDENTITY) private int							id;
+	@NotNull private String																	address;
+	private String																			address2;
+	@NotNull private String																	zip;
+	@NotNull private String																	city;
+	@NotNull private String																	country;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "publisher_id") private Publisher										publisher;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "publisher_id") private Publisher									publisher;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "author_id") private Author												author;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "author_id") private Author											author;
 	
 	public Address()
 	{
@@ -131,16 +131,15 @@ public class Address
 	{
 		this.publisher = publisher;
 	}
-
+	
 	public Author getAuthor()
 	{
 		return author;
 	}
-
+	
 	public void setAuthor(Author author)
 	{
 		this.author = author;
 	}
-	
 	
 }

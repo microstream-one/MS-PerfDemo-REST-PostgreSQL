@@ -49,7 +49,11 @@ public class ControllerBook
 	@Put
 	HttpResponse<String> create(@NonNull @Valid @Body DTOBook dto)
 	{
-		bookRepo.save(internalGetBook(dto));
+		Book book = internalGetBook(dto);
+		book.getAuthor().getAddresses().forEach(a -> addressRepo.save(a));
+		book.getPublisher().getAddresses().forEach(a -> addressRepo.save(a));
+
+		bookRepo.save(book);
 		return HttpResponse.ok("Successfully created");
 	}
 
@@ -67,18 +71,17 @@ public class ControllerBook
 		return bookRepo.list().stream().limit(LIST_LIMIT).toList();
 	}
 
+	@Get("/byID/{id}")
+	Book findByID(@PathVariable final String id)
+	{
+		Book book = bookRepo.findById(Integer.valueOf(id)).get();
+		return book;
+	}
+	
 	@Get("/search/{title}")
 	List<Book> findByTitle(@PathVariable final String title)
 	{
 		return bookRepo.searchBooksByTitle("%" + title + "%");
-	}
-
-	@Get("/search/author/{email}")
-	List<Book> findByAuthorEmail(@PathVariable final String email)
-	{
-		final var author = authorRepo.findOne(AuthorPredicateProvider.emailEquals(email))
-			.orElseThrow(NotFoundException::new);
-		return bookRepo.searchByAuthorId(author.getId());
 	}
 
 	@Get("/{isbn}")
@@ -119,6 +122,7 @@ public class ControllerBook
 				)
 			);
 
+		
 		Book book = new Book(dto);
 		book.setAuthor(author);
 		book.setPublisher(publisher);
