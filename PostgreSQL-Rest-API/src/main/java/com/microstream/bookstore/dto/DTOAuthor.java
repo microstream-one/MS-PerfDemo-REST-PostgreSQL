@@ -2,6 +2,8 @@ package com.microstream.bookstore.dto;
 
 import java.util.List;
 
+import com.microstream.bookstore.domain.Address;
+
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.serde.annotation.Serdeable;

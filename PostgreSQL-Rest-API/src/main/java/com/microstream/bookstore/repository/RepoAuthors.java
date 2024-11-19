@@ -3,6 +3,7 @@ package com.microstream.bookstore.repository;
 import java.util.Optional;
 
 import com.microstream.bookstore.domain.Author;
+import com.microstream.bookstore.dto.DTOAuthor;
 
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.data.annotation.Join;
@@ -16,8 +17,10 @@ import io.micronaut.data.repository.jpa.JpaSpecificationExecutor;
 public interface RepoAuthors extends CrudRepository<Author, Integer>, JpaSpecificationExecutor<Author>
 {
 //	@Join(value = "addresses", type = Join.Type.LEFT_FETCH)
-//	Optional<Author> getById(@NonNull Integer id);
+//	Optional<DTOAuthor> getById(@NonNull Integer id);
 	
 	@Join(value = "addresses", type = Join.Type.LEFT_FETCH)
 	Optional<Author> findById(@NonNull Integer id);
+	
+	
 }
