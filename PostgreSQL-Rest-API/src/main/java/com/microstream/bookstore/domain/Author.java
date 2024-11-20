@@ -4,9 +4,13 @@ package com.microstream.bookstore.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,7 +36,9 @@ public class Author implements java.io.Serializable
 	@NotNull private String												lastname;
 	@NotNull
 	
-	@OneToMany(mappedBy = "author") private List<Address>				addresses	=
+	@OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+	@Fetch(FetchMode.JOIN)
+	private List<Address>				addresses	=
 		new ArrayList<>();
 	
 	public Author()

@@ -6,12 +6,14 @@ import java.util.Optional;
 import com.microstream.bookstore.domain.Book;
 
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.data.annotation.Join;
 import io.micronaut.data.annotation.Query;
 import io.micronaut.data.jdbc.annotation.JdbcRepository;
 import io.micronaut.data.model.query.builder.sql.Dialect;
 import io.micronaut.data.repository.PageableRepository;
 import io.micronaut.data.repository.jpa.JpaSpecificationExecutor;
+import io.micronaut.data.repository.jpa.criteria.PredicateSpecification;
 
 @JdbcRepository(dialect = Dialect.POSTGRES)
 public interface RepoBooks extends PageableRepository<Book, Integer>, JpaSpecificationExecutor<Book>
@@ -55,4 +57,8 @@ public interface RepoBooks extends PageableRepository<Book, Integer>, JpaSpecifi
 	@Join(value = "author")
 	@Join(value = "publisher")
 	Optional<Book> searchBooksByIsbn(String isbn);
+	
+	@Join(value = "author")
+	@Join(value = "publisher")
+	Optional<Book> findOne(@Nullable PredicateSpecification<Book> spec);
 }
