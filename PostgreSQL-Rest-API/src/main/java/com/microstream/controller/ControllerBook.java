@@ -1,8 +1,8 @@
 package com.microstream.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.microstream.bookstore.domain.Address;
 import com.microstream.bookstore.domain.Author;
@@ -25,7 +25,6 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Put;
-import io.micronaut.http.server.exceptions.NotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -113,21 +112,48 @@ public class ControllerBook
 	
 	private Book internalGetBook(final DTOBook dto)
 	{
-		final var author = authorRepo.findOne(AuthorPredicateProvider.emailEquals(dto.author().mail())).orElseGet(
-			() -> authorRepo.save(
-				new Author(
-					dto.author().mail(),
-					dto.author().firstname(),
-					dto.author().lastname(),
-					dto.author().addresses().stream().map(a -> addressRepo.save(new Address(a))).collect(
-						Collectors.toList()))));
-		final var publisher = pubRepo.findOne(PublisherPredicateProvider.emailEquals(dto.publisher().mail())).orElseGet(
-			() -> pubRepo.save(
-				new Publisher(
+		final var author = authorRepo.findOne(AuthorPredicateProvider.emailEquals(dto.author().mail())).orElseGet(() ->
+		{
+			Author newAuthor = new Author(
+				dto.author().mail(),
+				dto.author().firstname(),
+				dto.author().lastname(),
+				new ArrayList<Address>());
+			
+			authorRepo.save(newAuthor);
+			
+			dto.author().addresses().stream().forEach(ad ->
+			{
+				Address address = new Address(ad);
+				address.setAuthor(newAuthor);
+				
+				addressRepo.save(address);
+			});
+			
+			return newAuthor;
+		});
+		
+		final var publisher =
+			pubRepo.findOne(PublisherPredicateProvider.emailEquals(dto.publisher().mail())).orElseGet(() ->
+			{
+				
+				Publisher newPublisher = new Publisher(
 					dto.publisher().mail(),
 					dto.publisher().company(),
-					dto.publisher().addresses().stream().map(a -> addressRepo.save(new Address(a))).collect(
-						Collectors.toList()))));
+					new ArrayList<Address>());
+				
+				pubRepo.save(newPublisher);
+				
+				dto.publisher().addresses().stream().forEach(ad ->
+				{
+					Address address = new Address(ad);
+					address.setPublisher(newPublisher);
+					
+					addressRepo.save(address);
+				});
+				
+				return newPublisher;
+			});
 		
 		Book book = new Book(dto);
 		book.setAuthor(author);

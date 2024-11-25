@@ -44,7 +44,7 @@ public class Book implements java.io.Serializable
 	
 	public Book(DTOBook dto)
 	{
-		this.isbn = dto.ISBN();
+		this.isbn = dto.isbn();
 		this.title = dto.title();
 		this.publicationDate = dto.publicationDate();
 		this.edition = dto.edition();

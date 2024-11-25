@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 @Serdeable
 @Introspected
 public record DTOBook(
-	@NotBlank String ISBN,
+	@NotBlank String isbn,
 	@NotBlank String title,
 	@NonNull LocalDate publicationDate,
 	int edition,
