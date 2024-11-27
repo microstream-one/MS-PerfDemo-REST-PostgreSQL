@@ -22,8 +22,10 @@ import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Body;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Put;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -108,6 +110,17 @@ public class ControllerBook
 		{
 			return null;
 		}
+	}
+	
+	@Delete("/flushdatabase")
+	HttpResponse<String> flushDatabase()
+	{
+		addressRepo.deleteAll();
+		bookRepo.deleteAll();
+		authorRepo.deleteAll();
+		pubRepo.deleteAll();
+		
+		return HttpResponse.ok("Data successfully deleted"); 
 	}
 	
 	private Book internalGetBook(final DTOBook dto)
