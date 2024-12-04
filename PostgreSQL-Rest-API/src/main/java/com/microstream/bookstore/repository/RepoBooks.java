@@ -61,4 +61,6 @@ public interface RepoBooks extends PageableRepository<Book, Integer>, JpaSpecifi
 	@Join(value = "author")
 	@Join(value = "publisher")
 	Optional<Book> findOne(@Nullable PredicateSpecification<Book> spec);
+	
+	
 }
