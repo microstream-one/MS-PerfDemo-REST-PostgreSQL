@@ -153,10 +153,11 @@ public class ControllerBook
 	@Delete("/flushdatabase")
 	HttpResponse<String> flushDatabase()
 	{
-		addressRepo.deleteAll();
 		bookRepo.deleteAll();
+		addressRepo.deleteAll();
 		authorRepo.deleteAll();
 		pubRepo.deleteAll();
+		
 		
 		return HttpResponse.ok("Data successfully deleted");
 	}
