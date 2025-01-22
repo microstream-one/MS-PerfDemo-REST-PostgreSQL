@@ -128,6 +128,20 @@ public class ControllerBook
 		return searchBooksByTitle;
 	}
 	
+	@Get("/count")
+	Long countBooks()
+	{
+		long count = bookRepo.count();
+		return count;
+	}
+	
+	@Get("/countInsertPM")
+	Long countBooksInsertPM()
+	{
+		long count = bookRepoInsert.count();
+		return count;
+	}
+	
 	@Get("/{isbn}")
 	DTOBook findByIsbn(@PathVariable final String isbn)
 	{
