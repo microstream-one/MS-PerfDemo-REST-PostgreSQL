@@ -4,6 +4,10 @@
 
 REST Proxy receives the the requests from sender and returns PostgreSQL data. On the architecture chart this project is the yellow section on the right.
 
+## Links to other part projects:
+1. REST Proxy EclipseStore (Blue on the left): https://github.com/microstream-one/MS-PerfDemo-REST-ES/tree/master
+2. Sender Application (Gray on the bottom): https://github.com/microstream-one/MS-PerfDemo-Sender/tree/master
+
 ## Setup
 
 1. Build an image by using the following command:
