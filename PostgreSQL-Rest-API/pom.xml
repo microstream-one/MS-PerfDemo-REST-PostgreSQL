@@ -2,102 +2,135 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<groupId>io.micronaut</groupId>
-		<artifactId>micronaut-parent</artifactId>
-		<version>2.4.1</version>
-	</parent>
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.microstream</groupId>
-	<artifactId>PostgreSQL-Rest-API</artifactId>
+	<groupId>one.microstream</groupId>
+	<artifactId>demo</artifactId>
+	<version>1.0.3</version>
 	<packaging>${packaging}</packaging>
-	<version>0.1</version>
+
+	<parent>
+		<groupId>io.micronaut.platform</groupId>
+		<artifactId>micronaut-parent</artifactId>
+		<version>4.6.2</version>
+	</parent>
+	<properties>
+		<packaging>jar</packaging>
+		<jdk.version>17</jdk.version>
+		<release.version>17</release.version>
+		<micronaut.version>4.6.2</micronaut.version>
+		<micronaut.test.resources.enabled>true</micronaut.test.resources.enabled>
+		<micronaut.runtime>netty</micronaut.runtime>
+		<micronaut.aot.enabled>false</micronaut.aot.enabled>
+		<micronaut.aot.packageName>one.microstream.aot.generated</micronaut.aot.packageName>
+		<exec.mainClass>one.microstream.Application</exec.mainClass>
+	</properties>
+
 	<build>
 		<plugins>
+		
+        <!-- Docker Building gets stuck with newest version -->
+        <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.3.2</version>
+                <configuration>
+                    <to>
+                        <image>microstream-postgres-book-demo-server</image>
+                        <tags>
+                            <tag>${project.version}</tag>
+                        </tags>
+                    </to>
+                </configuration>
+        </plugin>
+		
 			<plugin>
-				<groupId>io.micronaut.build</groupId>
+				<groupId>io.micronaut.maven</groupId>
 				<artifactId>micronaut-maven-plugin</artifactId>
+				<configuration>
+					<configFile>aot-${packaging}.properties</configFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-
 					<!-- Uncomment to enable incremental compilation -->
-					<!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
+					<!--
+					<useIncrementalCompilation>false</useIncrementalCompilation> -->
 
-					<annotationProcessorPaths
-						combine.children="append">
+					<annotationProcessorPaths combine.self="override">
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-inject-java</artifactId>
+							<version>${micronaut.core.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut.data</groupId>
+							<artifactId>micronaut-data-processor</artifactId>
+							<version>${micronaut.data.version}</version>
+							<exclusions>
+								<exclusion>
+									<groupId>io.micronaut</groupId>
+									<artifactId>micronaut-inject</artifactId>
+								</exclusion>
+							</exclusions>
+						</path>
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-graal</artifactId>
+							<version>${micronaut.core.version}</version>
+						</path>
+						<path>
+							<groupId>io.micronaut</groupId>
+							<artifactId>micronaut-http-validation</artifactId>
+							<version>${micronaut.core.version}</version>
+						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<arg>
-							-Amicronaut.processing.group=com.microstream
-						</arg>
-						<arg>
-							-Amicronaut.processing.module=PostgreSQL-Rest-API
-						</arg>
+						<arg>-Amicronaut.processing.group=one.microstream</arg>
+						<arg>-Amicronaut.processing.module=microstream-postgres-book-demo-server</arg>
 					</compilerArgs>
-<!-- 					<annotationProcessors> -->
-<!-- 						<annotationProcessor> -->
-<!-- 							org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</annotationProcessor> -->
-<!-- 					</annotationProcessors> -->
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+
+
 	<repositories>
 		<repository>
 			<id>central</id>
 			<url>https://repo.maven.apache.org/maven2</url>
 		</repository>
-		<repository>
-			<id>microstream-releases</id>
-			<url>
-				https://repo.microstream.one/repository/maven-releases/
-			</url>
-		</repository>
-		<repository>
-			<id>ossrh-snapshots</id>
-			<url>
-				https://oss.sonatype.org/content/repositories/snapshots
-			</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
+
 	<dependencies>
 		<dependency>
-			<groupId>io.prometheus</groupId>
-			<artifactId>simpleclient_servlet</artifactId>
-			<version>0.10.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-core</artifactId>
-			<version>8.5.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.lucene</groupId>
-			<artifactId>lucene-queryparser</artifactId>
-			<version>8.5.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>29.0-jre</version>
-		</dependency>
-		<dependency>
-			<groupId>io.micronaut</groupId>
-			<artifactId>micronaut-inject</artifactId>
+			<groupId>io.micronaut.data</groupId>
+			<artifactId>micronaut-data-jdbc</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.micronaut</groupId>
-			<artifactId>micronaut-validation</artifactId>
+			<groupId>io.micronaut.sql</groupId>
+			<artifactId>micronaut-hibernate-jpa</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.sql</groupId>
+			<artifactId>micronaut-jdbc-hikari</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.data</groupId>
+			<artifactId>micronaut-data-hibernate-jpa</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.data</groupId>
+			<artifactId>micronaut-data-tx-hibernate</artifactId>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
@@ -106,8 +139,9 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.micronaut</groupId>
-			<artifactId>micronaut-management</artifactId>
+			<groupId>io.micronaut.serde</groupId>
+			<artifactId>micronaut-serde-jackson</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -134,48 +168,37 @@
 			<artifactId>micronaut-http-client</artifactId>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>io.micronaut</groupId>
-			<artifactId>micronaut-runtime</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>javax.annotation-api</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>io.micronaut.micrometer</groupId>
-			<artifactId>
-				micronaut-micrometer-registry-prometheus
-			</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.rapidclipse</groupId>
-			<artifactId>rap-server-core</artifactId>
-			<version>10.04.00-RAP-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.rapidclipse</groupId>
-			<artifactId>rap-server-persistence-jpa</artifactId>
-			<version>10.04.00-RAP-SNAPSHOT</version>
-		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.0.0</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.micronaut.cache</groupId>
 			<artifactId>micronaut-cache-core</artifactId>
 		</dependency>
+
+		<!-- Micrometer for Exporting Prometheus Stats -->
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-observation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-observation-http</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut.micrometer</groupId>
+			<artifactId>micronaut-micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micronaut</groupId>
+			<artifactId>micronaut-management</artifactId>
+		</dependency>
 	</dependencies>
-	<properties>
-		<packaging>jar</packaging>
-		<jdk.version>11</jdk.version>
-		<release.version>11</release.version>
-		<micronaut.version>2.4.1</micronaut.version>
-		<exec.mainClass>com.microstream.Application</exec.mainClass>
-		<micronaut.runtime>netty</micronaut.runtime>
-	</properties>
 </project>

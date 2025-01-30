@@ -1,5 +1,4 @@
-
-package com.microstream.bookstore.domain;
+package com.microstream.bookstore.domain.insert;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,13 +17,13 @@ import jakarta.validation.constraints.NotNull;
 
 
 /**
- * Book
+ * Book entity for insert performance measuring
  */
 @Serdeable
 @Entity
 @Cacheable(true)
-@Table(name = "books", schema = "public")
-public class Book implements java.io.Serializable
+@Table(name = "booksinsert", schema = "public")
+public class BookInsert
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) private int		id;
@@ -35,14 +34,14 @@ public class Book implements java.io.Serializable
 	@NotNull private int												availableQuantity;
 	@NotNull private BigDecimal											price;
 	
-	@ManyToOne private Author											author;
-	@ManyToOne private Publisher										publisher;
+	@ManyToOne private AuthorInsert										author;
+	@ManyToOne private PublisherInsert									publisher;
 	
-	public Book()
+	public BookInsert()
 	{
 	}
 	
-	public Book(DTOBook dto)
+	public BookInsert(DTOBook dto)
 	{
 		this.isbn = dto.isbn();
 		this.title = dto.title();
@@ -122,22 +121,22 @@ public class Book implements java.io.Serializable
 		this.price = price;
 	}
 	
-	public Author getAuthor()
+	public AuthorInsert getAuthor()
 	{
 		return author;
 	}
 	
-	public void setAuthor(Author author)
+	public void setAuthor(AuthorInsert author)
 	{
 		this.author = author;
 	}
 	
-	public Publisher getPublisher()
+	public PublisherInsert getPublisher()
 	{
 		return publisher;
 	}
 	
-	public void setPublisher(Publisher publisher)
+	public void setPublisher(PublisherInsert publisher)
 	{
 		this.publisher = publisher;
 	}

@@ -1,5 +1,4 @@
-
-package com.microstream.bookstore.domain;
+package com.microstream.bookstore.domain.insert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +14,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
+/**
+ * Publisher entity for insert performance measuring
+ */
 @Serdeable
 @Entity
 @Cacheable(true)
-@Table(name = "publisher", schema = "public")
-public class Publisher
+@Table(name = "publisherinsert", schema = "public")
+public class PublisherInsert
 {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,14 +32,14 @@ public class Publisher
 	private String company;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "publisher")
-	private List<Address> addresses = new ArrayList<>();
+	private List<AddressInsert> addresses = new ArrayList<>();
 	
-	public Publisher()
+	public PublisherInsert()
 	{
 		
 	}
 
-	public Publisher(String mail, String company, List<Address> addresses)
+	public PublisherInsert(String mail, String company, List<AddressInsert> addresses)
 	{
 		this.mail = mail;
 		this.company = company;
@@ -74,12 +76,12 @@ public class Publisher
 		this.id = id;
 	}
 
-	public List<Address> getAddresses()
+	public List<AddressInsert> getAddresses()
 	{
 		return addresses;
 	}
 
-	public void setAddresses(List<Address> addresses)
+	public void setAddresses(List<AddressInsert> addresses)
 	{
 		this.addresses = addresses;
 	}

@@ -1,5 +1,4 @@
-
-package com.microstream.bookstore.domain;
+package com.microstream.bookstore.domain.insert;
 
 import com.microstream.bookstore.dto.DTOAddress;
 
@@ -17,33 +16,33 @@ import jakarta.validation.constraints.NotNull;
 
 
 /**
- * Address
+ * Address entity for insert performance measuring
  */
 @Serdeable
 @Entity
 @Cacheable(true)
-@Table(name = "addresses", schema = "public")
-public class Address
+@Table(name = "addressesinsert", schema = "public")
+public class AddressInsert
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) private int							id;
-	@NotNull private String																	address;
-	private String																			address2;
-	@NotNull private String																	zip;
-	@NotNull private String																	city;
-	@NotNull private String																	country;
+	@GeneratedValue(strategy = GenerationType.IDENTITY) private int									id;
+	@NotNull private String																			address;
+	private String																					address2;
+	@NotNull private String																			zip;
+	@NotNull private String																			city;
+	@NotNull private String																			country;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "publisher_id") private Publisher									publisher;
+	@JoinColumn(name = "publisher_id") private PublisherInsert										publisher;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "author_id") private Author											author;
+	@JoinColumn(name = "author_id") private AuthorInsert											author;
 	
-	public Address()
+	public AddressInsert()
 	{
 	}
 	
-	public Address(String address, String address2, String zip, String city, String country)
+	public AddressInsert(String address, String address2, String zip, String city, String country)
 	{
 		super();
 		this.address = address;
@@ -53,7 +52,7 @@ public class Address
 		this.country = country;
 	}
 	
-	public Address(DTOAddress dto)
+	public AddressInsert(DTOAddress dto)
 	{
 		this.address = dto.address();
 		this.address2 = dto.address2();
@@ -122,22 +121,22 @@ public class Address
 		this.id = id;
 	}
 	
-	public Publisher getPublisher()
+	public PublisherInsert getPublisher()
 	{
 		return publisher;
 	}
 	
-	public void setPublisher(Publisher publisher)
+	public void setPublisher(PublisherInsert publisher)
 	{
 		this.publisher = publisher;
 	}
 	
-	public Author getAuthor()
+	public AuthorInsert getAuthor()
 	{
 		return author;
 	}
 	
-	public void setAuthor(Author author)
+	public void setAuthor(AuthorInsert author)
 	{
 		this.author = author;
 	}

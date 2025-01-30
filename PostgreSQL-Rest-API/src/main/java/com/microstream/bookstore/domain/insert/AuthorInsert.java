@@ -1,5 +1,4 @@
-
-package com.microstream.bookstore.domain;
+package com.microstream.bookstore.domain.insert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,42 +17,40 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
-
 /**
- * Author
+ * Author entity for insert performance measuring
  */
 @Serdeable
 @Entity
 @Cacheable(true)
-@Table(name = "author", schema = "public")
-public class Author implements java.io.Serializable
+@Table(name = "authorinsert", schema = "public")
+public class AuthorInsert
 {
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) private int		id;
 	@NotNull private String												mail;
 	@NotNull private String												firstname;
 	@NotNull private String												lastname;
-	@NotNull
 	
+	@NotNull
 	@OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
 	@Fetch(FetchMode.JOIN)
-	private List<Address>				addresses	=
+	private List<AddressInsert>				addresses	=
 		new ArrayList<>();
 	
-	public Author()
+	public AuthorInsert()
 	{
 		this.addresses = new ArrayList<>();
 	}
 	
-	public Author(String mail, String firstname, String lastname, List<Address> addresses)
+	public AuthorInsert(String mail, String firstname, String lastname, List<AddressInsert> addresses)
 	{
 		this.mail = mail;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.addresses = addresses;
 		
-		for(Address address : addresses)
+		for(AddressInsert address : addresses)
 		{
 			address.setAuthor(this);
 		}
@@ -99,12 +96,12 @@ public class Author implements java.io.Serializable
 		this.lastname = lastname;
 	}
 	
-	public List<Address> getAddresses()
+	public List<AddressInsert> getAddresses()
 	{
 		return addresses;
 	}
 	
-	public void setAddresses(List<Address> addresses)
+	public void setAddresses(List<AddressInsert> addresses)
 	{
 		this.addresses = addresses;
 	}
